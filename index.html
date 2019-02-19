@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ServiceWorker and Webcomponents</title>
+    <meta name="viewport" content="width=device-width">
+    <script type="text/javascript" src="./src/js/homepage.js"></script>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Tangerine">
+    <script type="text/javascript"   src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"  charset="UTF-8"></script>
+ <style>
+     x-clickme.wide  button { width: 200px}
+
+ </style>
+</head>
+<body>
+<h1>Demo for : ServiceWorker and webcomponents </h1>
+<script>
+    // Check that service workers are registered
+    if ('serviceWorker' in navigator) {
+        // Use the window load event to keep the page load performant
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js');
+        });
+    }
+
+
+    let tmpl = document.createElement('template');
+    tmpl.innerHTML = `
+  <style>
+     b {color : red}
+</style>
+        <b>I'm in shadow dom using template!</b> `
+
+
+    customElements.define('x-ex-shadowdom', class extends HTMLElement {
+      constructor() {
+        super(); // always call super() first in the constructor.
+
+        // Attach a shadow root to the element.
+        let shadowRoot = this.attachShadow({mode: 'open'});
+        shadowRoot.appendChild(tmpl.content.cloneNode(true));
+      }
+    });
+
+         class Clickme extends HTMLElement {
+            constructor() {
+                super();
+            }
+
+            connectedCallback() {
+                this.innerHTML = `
+             <button>Click me</button>
+    `;
+            this.addEventListener("click", () => {
+                this.classList.add("wide");
+            })
+        }
+    }
+
+    customElements.define('x-clickme', Clickme);
+
+</script>
+</body>
+<header>
+    <h2> Webcomponent examples </h2>
+</header>
+<div>
+    <h4> Example1 </h4>
+    <x-clickme></x-clickme>
+</div>
+
+
+<h4> This is using a template </h4>
+
+<x-ex-shadowdom></x-ex-shadowdom>
+</html>

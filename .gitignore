@@ -1,0 +1,14 @@
+node_modules
+
+#IntelliJ
+.idea/
+*.iml
+atlassian-ide-plugin.xml
+*.ipr
+*.iws
+
+#Eclipse
+.project
+
+#OSX
+.DS_Store
